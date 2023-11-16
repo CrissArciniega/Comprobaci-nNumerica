@@ -128,20 +128,67 @@ public class comprobaciónNumerica extends javax.swing.JFrame {
 
     private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
         // TODO add your handling code here:
+  
     try {
         int numero = Integer.parseInt(txtNumero.getText());
-        if (esNumeroPerfecto(numero)) {
-            JOptionPane.showMessageDialog(this, "El número es perfecto", "Resultado", JOptionPane.INFORMATION_MESSAGE);
-                txtNumero.setText("");
+
+        if (numero >= 1 && numero <= 500) {
+            // Comprueba si el número es perfecto y muestra el resultado
+            if (esNumeroPerfecto(numero)) {
+                JOptionPane.showMessageDialog(this, "El número es perfecto", "Número Perfecto", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "El número no es perfecto", "Número Perfecto", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            // Comprueba si el número ingresado es primo y muestra el resultado
+            if (esNumeroPrimo(numero)) {
+                JOptionPane.showMessageDialog(this, "El número ingresado es primo", "Número Primo", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "El número ingresado no es primo", "Número Primo", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            // Encuentra y muestra los números primos hasta el número ingresado
+            StringBuilder primos = new StringBuilder("Números primos hasta " + numero + ":\n");
+            for (int i = 2; i <= numero; i++) {
+                if (esNumeroPrimo(i)) {
+                    primos.append(i).append(", ");
+                }
+            }
+
+            if (primos.length() > 0) {
+                primos.setLength(primos.length() - 2); // Elimina la última coma y espacio
+                JOptionPane.showMessageDialog(this, primos.toString(), "Números primos", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay números primos hasta " + numero, "Números primos", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            // Realiza la sumatoria solo si el número ingresado es primo
+            int suma = 0;
+            if (esNumeroPrimo(numero)) {
+                for (int i = 1; i < numero; i++) {
+                    suma += i;
+                }
+                JOptionPane.showMessageDialog(this, "La suma de los números menores es: " + suma, "Suma de Números Menores", JOptionPane.INFORMATION_MESSAGE);
+
+                // Calcula la raíz cuadrada si el resultado de la suma es primo
+                if (esNumeroPrimo(suma)) {
+                    double raiz = Math.sqrt(suma);
+                    JOptionPane.showMessageDialog(this, "La raíz cuadrada de la suma es: " + raiz, "Raíz Cuadrada", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "La suma no es un número primo, no se puede calcular la raíz cuadrada", "Raíz Cuadrada", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
         } else {
-            JOptionPane.showMessageDialog(this, "El número no es perfecto", "Resultado", JOptionPane.INFORMATION_MESSAGE);
-                txtNumero.setText("");
+            JOptionPane.showMessageDialog(this, "Ingrese un número entre 1 y 500", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Ingrese un número válido", "Error", JOptionPane.ERROR_MESSAGE);
-                txtNumero.setText("");
+        txtNumero.setText("");
     }
-}
+
+    }//GEN-LAST:event_btnComprobarActionPerformed
 private boolean esNumeroPerfecto(int numero) {
     int suma = 0;
     for (int i = 1; i <= numero / 2; i++) {
@@ -149,9 +196,20 @@ private boolean esNumeroPerfecto(int numero) {
             suma += i;
         }
     }
-    return suma == numero;
-    }//GEN-LAST:event_btnComprobarActionPerformed
-
+    return suma==numero;
+   
+  }  
+private boolean esNumeroPrimo(int num) {
+    if (num <= 1) {
+        return false; 
+    }
+    for (int i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i == 0) {
+            return false; 
+        }
+    }
+    return true; 
+}
     /**
      * @param args the command line arguments
      */
